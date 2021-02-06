@@ -1,0 +1,63 @@
+<form action="#">
+    <div class="modal-header">
+        <h5 class="modal-title" th:text="${action == 'edit'} ? 'Edit user' : 'Delete user'"></h5>
+        <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="col-lg-7 col-md-7 col-sm-6 mx-auto px-5">
+            <div class="form-group">
+                <label class="font-weight-bolder mb-0" for="idInput">ID</label>
+                <input type="text" name="id" class="form-control form-control-sm" id="idInput"
+                       readonly>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bolder mb-0" for="nameInput">First name</label>
+                <input type="text" name="name" class="form-control form-control-sm"
+                       id="nameInput"
+                       th:disabled="${action == 'delete'} ? true : false"/>
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bolder mb-0" for="lastNameInput">Last name</label>
+                <input type="text" name="lastName" class="form-control form-control-sm"
+                       id="lastNameInput"
+                       th:disabled="${action == 'delete'} ? true : false">
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bolder mb-0" for="ageInput">Age</label>
+                <input type="number" name="age" class="form-control form-control-sm"
+                       id="ageInput"
+                       th:disabled="${action == 'delete'} ? true : false">
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bolder mb-0" for="emailInput">Email</label>
+                <input type="email" name="email" class="form-control form-control-sm"
+                       id="emailInput"
+                       th:disabled="${action == 'delete'} ? true : false">
+            </div>
+            <div class="form-group" th:hidden="${action == 'delete'} ? true : false">
+                <label class="font-weight-bolder mb-0" for="passwordInput">Password</label>
+                <input type="password" name="password" class="form-control form-control-sm" id="passwordInput"
+                       th:required="${action == 'edit'} ? true : false">
+            </div>
+            <div class="form-group">
+                <label class="font-weight-bolder mb-0" for="roleSelect">Role</label>
+                <select class="custom-select custom-select-sm" name="role" id="roleSelect" size="2"
+                        th:disabled="${action == 'delete'} ? true : false" required>
+                    <option th:each="roleValue : ${T(com.example.project.model.UserAuthority$Role).values()}"
+                            th:value="${roleValue}"
+                            th:text="${roleValue}">
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit"
+                th:class="*{action == 'edit'} ? 'btn btn-info' : 'btn btn-danger'"
+                th:text="*{action == 'edit'} ? 'Edit' : 'Delete'">
+        </button>
+    </div>
+</form>
