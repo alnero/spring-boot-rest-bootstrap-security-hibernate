@@ -2,8 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.model.User;
 import com.example.project.model.UserAuthority;
-import com.example.project.security.SuccessUserHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -11,23 +10,17 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-    private final SuccessUserHandler successUserHandler;
-
-    @Autowired
-    public UsersController(SuccessUserHandler successUserHandler) {
-        this.successUserHandler = successUserHandler;
-    }
-
     @GetMapping()
-    public String adminPage(ModelMap model) {
-        Long authenticatedUserId = successUserHandler.currentAuthenticatedUser().getId();
+    public String adminPage(ModelMap model, Authentication authentication) {
+        User authenticatedUser = (User) authentication.getPrincipal();
+        Long authenticatedUserId = authenticatedUser.getId();
         model.addAttribute("userId", authenticatedUserId);
         return "admin";
     }
 
     @GetMapping("/{id}")
-    public String userPage(@PathVariable Long id, ModelMap model) {
-        User authenticatedUser = successUserHandler.currentAuthenticatedUser();
+    public String userPage(@PathVariable Long id, ModelMap model, Authentication authentication) {
+        User authenticatedUser = (User) authentication.getPrincipal();
         Long authenticatedUserId = authenticatedUser.getId();
         String authenticatedUserAuthority = authenticatedUser.getAuthorities().iterator().next().getAuthority();
         // admin has access to any user page

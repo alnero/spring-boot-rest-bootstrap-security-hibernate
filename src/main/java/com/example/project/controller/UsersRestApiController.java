@@ -3,13 +3,13 @@ package com.example.project.controller;
 import com.example.project.dto.UserDto;
 import com.example.project.model.User;
 import com.example.project.model.UserAuthority;
-import com.example.project.security.SuccessUserHandler;
 import com.example.project.service.UserAuthorityService;
 import com.example.project.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,17 +22,14 @@ import java.util.stream.Collectors;
 public class UsersRestApiController {
     private final UserService userService;
     private final UserAuthorityService userAuthorityService;
-    private final SuccessUserHandler successUserHandler;
     private final ModelMapper modelMapper;
 
     @Autowired
     public UsersRestApiController(UserService userService,
                                   UserAuthorityService userAuthorityService,
-                                  SuccessUserHandler successUserHandler,
                                   ModelMapper modelMapper) {
         this.userService = userService;
         this.userAuthorityService = userAuthorityService;
-        this.successUserHandler = successUserHandler;
         this.modelMapper = modelMapper;
     }
 
@@ -44,8 +41,8 @@ public class UsersRestApiController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserDto> getById(@PathVariable Long id) {
-        User authenticatedUser = successUserHandler.currentAuthenticatedUser();
+    public ResponseEntity<UserDto> getById(@PathVariable Long id, Authentication authentication) {
+        User authenticatedUser = (User) authentication.getPrincipal();
         Long authenticatedUserId = authenticatedUser.getId();
         String authenticatedUserAuthority = authenticatedUser.getAuthorities().iterator().next().getAuthority();
         // admin can get any user
