@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,9 +34,7 @@ public class UsersRestApiController {
 
     @GetMapping("/users")
     public List<UserDto> list() {
-        List<User> result = new ArrayList<>();
-        userService.listUsers().forEach(result::add);
-        return result.stream().map(this::convertToDto).collect(Collectors.toList());
+        return userService.listUsers().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @GetMapping("/users/{id}")
