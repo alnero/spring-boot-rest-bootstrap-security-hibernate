@@ -6,7 +6,7 @@ $(document).ready(function () {
             let userObj = await response.json();
 
             $("#userEmail").text(userObj.email);
-            $("#userAuthority").text("with roles: " + userObj.role);
+            $("#userRole").text("with roles: " + userObj.role);
             let table = $("#userInformationTab table tbody");
             table.empty();
             let tableRow = $("<tr>");

@@ -1,7 +1,7 @@
 package com.example.project.controller;
 
+import com.example.project.model.Role;
 import com.example.project.model.User;
-import com.example.project.model.UserAuthority;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,9 +22,9 @@ public class UsersController {
     public String userPage(@PathVariable Long id, ModelMap model, Authentication authentication) {
         User authenticatedUser = (User) authentication.getPrincipal();
         Long authenticatedUserId = authenticatedUser.getId();
-        String authenticatedUserAuthority = authenticatedUser.getAuthorities().iterator().next().getAuthority();
+        String authenticatedUserRole = authenticatedUser.getAuthorities().iterator().next().getAuthority();
         // admin has access to any user page
-        if (UserAuthority.Role.ADMIN.name().equals(authenticatedUserAuthority) && !id.equals(authenticatedUserId)) {
+        if (Role.AvailableRoles.ADMIN.name().equals(authenticatedUserRole) && !id.equals(authenticatedUserId)) {
             model.addAttribute("userId", id);
             return "user";
         }

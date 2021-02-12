@@ -1,8 +1,8 @@
 package com.example.project;
 
+import com.example.project.model.Role;
 import com.example.project.model.User;
-import com.example.project.model.UserAuthority;
-import com.example.project.service.UserAuthorityService;
+import com.example.project.service.RoleService;
 import com.example.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,19 +12,19 @@ import javax.annotation.PostConstruct;
 @Component
 public class DbInit {
     private final UserService userService;
-    private final UserAuthorityService userAuthorityService;
+    private final RoleService roleService;
 
     @Autowired
-    public DbInit(UserService userService, UserAuthorityService userAuthorityService) {
+    public DbInit(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.userAuthorityService = userAuthorityService;
+        this.roleService = roleService;
     }
 
     @PostConstruct
     private void postConstruct() {
         // add authorities to DB
-        for (UserAuthority.Role role : UserAuthority.Role.values()) {
-            userAuthorityService.add(new UserAuthority(role.name()));
+        for (Role.AvailableRoles role : Role.AvailableRoles.values()) {
+            roleService.add(new Role(role.name()));
         }
 
         // add admin to DB
@@ -34,7 +34,7 @@ public class DbInit {
                 (byte) 1,
                 "admin@mail.org");
         admin.setPassword("admin");
-        admin.setUserAuthority(userAuthorityService.getUserAuthorityByName(UserAuthority.Role.ADMIN.name()));
+        admin.setRole(roleService.getByName(Role.AvailableRoles.ADMIN.name()));
         userService.add(admin);
 
         // add user to DB
@@ -44,7 +44,7 @@ public class DbInit {
                 (byte) 2,
                 "user@mail.org");
         user.setPassword("user");
-        user.setUserAuthority(userAuthorityService.getUserAuthorityByName(UserAuthority.Role.USER.name()));
+        user.setRole(roleService.getByName(Role.AvailableRoles.USER.name()));
         userService.add(user);
     }
 }

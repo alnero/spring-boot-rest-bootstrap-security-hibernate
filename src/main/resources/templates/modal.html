@@ -45,7 +45,7 @@
                 <label class="font-weight-bolder mb-0" for="roleSelect">Role</label>
                 <select class="custom-select custom-select-sm" name="role" id="roleSelect" size="2"
                         th:disabled="${action == 'delete'} ? true : false" required>
-                    <option th:each="roleValue : ${T(com.example.project.model.UserAuthority$Role).values()}"
+                    <option th:each="roleValue : ${T(com.example.project.model.Role$AvailableRoles).values()}"
                             th:value="${roleValue}"
                             th:text="${roleValue}">
                     </option>

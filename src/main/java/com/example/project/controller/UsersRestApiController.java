@@ -1,9 +1,9 @@
 package com.example.project.controller;
 
 import com.example.project.dto.UserDto;
+import com.example.project.model.Role;
 import com.example.project.model.User;
-import com.example.project.model.UserAuthority;
-import com.example.project.service.UserAuthorityService;
+import com.example.project.service.RoleService;
 import com.example.project.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class UsersRestApiController {
     private final UserService userService;
-    private final UserAuthorityService userAuthorityService;
+    private final RoleService roleService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public UsersRestApiController(UserService userService,
-                                  UserAuthorityService userAuthorityService,
+                                  RoleService roleService,
                                   ModelMapper modelMapper) {
         this.userService = userService;
-        this.userAuthorityService = userAuthorityService;
+        this.roleService = roleService;
         this.modelMapper = modelMapper;
     }
 
@@ -44,9 +44,9 @@ public class UsersRestApiController {
     public ResponseEntity<UserDto> getById(@PathVariable Long id, Authentication authentication) {
         User authenticatedUser = (User) authentication.getPrincipal();
         Long authenticatedUserId = authenticatedUser.getId();
-        String authenticatedUserAuthority = authenticatedUser.getAuthorities().iterator().next().getAuthority();
+        String authenticatedUserRole = authenticatedUser.getAuthorities().iterator().next().getAuthority();
         // admin can get any user
-        if (UserAuthority.Role.ADMIN.name().equals(authenticatedUserAuthority)) {
+        if (Role.AvailableRoles.ADMIN.name().equals(authenticatedUserRole)) {
             Optional<User> userOptional = userService.getById(id);
             return userOptional
                     .map(user -> new ResponseEntity<>(convertToDto(user), HttpStatus.OK))
@@ -104,11 +104,11 @@ public class UsersRestApiController {
         if (userDto.getAge() == null) {
             userDto.setAge((byte) 0);
         }
-        String role = userDto.getRole();
+        String roleFromDto = userDto.getRole();
         userDto.setRole(null);
         User user = modelMapper.map(userDto, User.class);
-        UserAuthority userAuthority = userAuthorityService.getUserAuthorityByName(role);
-        user.setUserAuthority(userAuthority);
+        Role role = roleService.getByName(roleFromDto);
+        user.setRole(role);
         return user;
     }
 }

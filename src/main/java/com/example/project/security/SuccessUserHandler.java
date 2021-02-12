@@ -1,7 +1,7 @@
 package com.example.project.security;
 
+import com.example.project.model.Role;
 import com.example.project.model.User;
-import com.example.project.model.UserAuthority;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -19,9 +19,9 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         User authenticatedUser = (User) authentication.getPrincipal();
         Long id = authenticatedUser.getId();
-        if (roles.contains(UserAuthority.Role.ADMIN.name())) {
+        if (roles.contains(Role.AvailableRoles.ADMIN.name())) {
             httpServletResponse.sendRedirect("/users");
-        } else if (roles.contains(UserAuthority.Role.USER.name())){
+        } else if (roles.contains(Role.AvailableRoles.USER.name())){
             httpServletResponse.sendRedirect("/users/" + id);
         }
     }

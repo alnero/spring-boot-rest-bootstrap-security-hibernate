@@ -1,6 +1,6 @@
 package com.example.project.security;
 
-import com.example.project.model.UserAuthority;
+import com.example.project.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,10 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/users/{id:\\d+}").hasAnyAuthority(UserAuthority.Role.USER.name(), UserAuthority.Role.ADMIN.name())
-                .antMatchers("/users/**").hasAuthority(UserAuthority.Role.ADMIN.name())
-                .antMatchers("/api/users/{id:\\d+}").hasAnyAuthority(UserAuthority.Role.USER.name(), UserAuthority.Role.ADMIN.name())
-                .antMatchers("/api/users/**").hasAuthority(UserAuthority.Role.ADMIN.name())
+                .antMatchers("/users/{id:\\d+}").hasAnyAuthority(Role.AvailableRoles.USER.name(), Role.AvailableRoles.ADMIN.name())
+                .antMatchers("/users/**").hasAuthority(Role.AvailableRoles.ADMIN.name())
+                .antMatchers("/api/users/{id:\\d+}").hasAnyAuthority(Role.AvailableRoles.USER.name(), Role.AvailableRoles.ADMIN.name())
+                .antMatchers("/api/users/**").hasAuthority(Role.AvailableRoles.ADMIN.name())
                 .antMatchers("/webjars/**", "/js/**", "/css/**").permitAll()
                 .anyRequest().authenticated();
 

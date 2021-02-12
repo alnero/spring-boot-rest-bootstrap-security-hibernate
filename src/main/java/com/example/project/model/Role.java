@@ -5,8 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 
 @Entity
-public class UserAuthority implements GrantedAuthority {
-    public enum Role {
+public class Role implements GrantedAuthority {
+    public enum AvailableRoles {
         USER, ADMIN
     }
 
@@ -15,14 +15,14 @@ public class UserAuthority implements GrantedAuthority {
     private Long id;
 
     @Column(unique = true)
-    private String authority;
+    private String name;
 
-    public UserAuthority() {
+    public Role() {
 
     }
 
-    public UserAuthority(String authority) {
-        this.authority = authority;
+    public Role(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -35,15 +35,15 @@ public class UserAuthority implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return authority;
+        return name;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return authority;
+        return name;
     }
 }
