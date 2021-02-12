@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class DbInit {
-    private UserService userService;
-    private UserAuthorityService userAuthorityService;
+    private final UserService userService;
+    private final UserAuthorityService userAuthorityService;
 
     @Autowired
     public DbInit(UserService userService, UserAuthorityService userAuthorityService) {

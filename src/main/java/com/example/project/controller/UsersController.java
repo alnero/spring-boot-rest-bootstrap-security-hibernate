@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-    private SuccessUserHandler successUserHandler;
+    private final SuccessUserHandler successUserHandler;
 
     @Autowired
     public UsersController(SuccessUserHandler successUserHandler) {

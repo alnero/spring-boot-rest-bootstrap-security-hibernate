@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserAuthorityServiceImpl implements UserAuthorityService {
-    private UserAuthorityRepository userAuthorityRepository;
+    private final UserAuthorityRepository userAuthorityRepository;
 
     @Autowired
     public UserAuthorityServiceImpl(UserAuthorityRepository userAuthorityRepository) {

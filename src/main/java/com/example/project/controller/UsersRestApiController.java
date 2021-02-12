@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class UsersRestApiController {
-    private UserService userService;
-    private UserAuthorityService userAuthorityService;
-    private SuccessUserHandler successUserHandler;
-    private ModelMapper modelMapper;
+    private final UserService userService;
+    private final UserAuthorityService userAuthorityService;
+    private final SuccessUserHandler successUserHandler;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public UsersRestApiController(UserService userService,
