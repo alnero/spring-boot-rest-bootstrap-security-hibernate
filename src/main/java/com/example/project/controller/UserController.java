@@ -8,18 +8,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/users")
-public class UsersController {
+@RequestMapping("/user")
+public class UserController {
     @GetMapping()
-    public String adminPage(ModelMap model, Authentication authentication) {
-        User authenticatedUser = (User) authentication.getPrincipal();
-        Long authenticatedUserId = authenticatedUser.getId();
-        model.addAttribute("userId", authenticatedUserId);
-        return "admin";
-    }
-
-    @GetMapping("/{id}")
-    public String userPage(@PathVariable Long id, ModelMap model, Authentication authentication) {
+    public String userPage(@RequestParam Long id, ModelMap model, Authentication authentication) {
         User authenticatedUser = (User) authentication.getPrincipal();
         Long authenticatedUserId = authenticatedUser.getId();
         String authenticatedUserRole = authenticatedUser.getAuthorities().iterator().next().getAuthority();
@@ -33,19 +25,7 @@ public class UsersController {
             model.addAttribute("userId", authenticatedUserId);
             return "user";
         } else {
-            return "redirect:/users/" + authenticatedUserId;
+            return "redirect:/user?id=" + authenticatedUserId;
         }
-    }
-
-    @GetMapping("/edit")
-    public String editModalPage(ModelMap model) {
-        model.addAttribute("action", "edit");
-        return "modal";
-    }
-
-    @GetMapping("/delete")
-    public String deleteModalPage(ModelMap model) {
-        model.addAttribute("action", "delete");
-        return "modal";
     }
 }

@@ -20,9 +20,9 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         User authenticatedUser = (User) authentication.getPrincipal();
         Long id = authenticatedUser.getId();
         if (roles.contains(Role.AvailableRoles.ADMIN.name())) {
-            httpServletResponse.sendRedirect("/users");
+            httpServletResponse.sendRedirect("/admin/users");
         } else if (roles.contains(Role.AvailableRoles.USER.name())){
-            httpServletResponse.sendRedirect("/users/" + id);
+            httpServletResponse.sendRedirect("/user?id=" + id);
         }
     }
 }

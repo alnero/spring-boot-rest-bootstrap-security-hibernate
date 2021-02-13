@@ -69,7 +69,7 @@ $(document).ready(function () {
                     text: "Edit",
                     id: "editUserButton",
                     class: "btn btn-info",
-                    href: "/users/edit",
+                    href: "/admin/users/edit",
                     click: function (e) {
                         e.preventDefault();
                         buttonEventListener($(this), "/api/users", "editUserForm");
@@ -79,7 +79,7 @@ $(document).ready(function () {
                     text: "Delete",
                     id: "deleteUserButton",
                     class: "btn btn-danger",
-                    href: "/users/delete",
+                    href: "/admin/users/delete",
                     click: function (e) {
                         e.preventDefault();
                         buttonEventListener($(this), "/api/users/" + id, "deleteUserForm");
