@@ -33,8 +33,9 @@ public class UsersRestApiController {
     }
 
     @GetMapping("/users")
-    public List<UserDto> list() {
-        return userService.listUsers().stream().map(this::convertToDto).collect(Collectors.toList());
+    public ResponseEntity<List<UserDto>> list() {
+        List<UserDto> userDtoList = userService.listUsers().stream().map(this::convertToDto).collect(Collectors.toList());
+        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
