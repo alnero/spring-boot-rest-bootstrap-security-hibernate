@@ -34,7 +34,7 @@ public class DbInit {
                 (byte) 1,
                 "admin@mail.org");
         admin.setPassword("admin");
-        admin.setRole(roleService.getByName(Role.AvailableRoles.ADMIN.name()));
+        admin.setRoles(roleService.getByName(Role.AvailableRoles.ADMIN.name()));
         userService.add(admin);
 
         // add user to DB
@@ -44,7 +44,7 @@ public class DbInit {
                 (byte) 2,
                 "user@mail.org");
         user.setPassword("user");
-        user.setRole(roleService.getByName(Role.AvailableRoles.USER.name()));
+        user.setRoles(roleService.getByName(Role.AvailableRoles.USER.name()));
         userService.add(user);
     }
 }

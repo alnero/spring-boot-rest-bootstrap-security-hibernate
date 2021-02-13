@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,10 +44,8 @@ public class UsersRestApiController {
         String authenticatedUserRole = authenticatedUser.getAuthorities().iterator().next().getAuthority();
         // admin can get any user
         if (Role.AvailableRoles.ADMIN.name().equals(authenticatedUserRole)) {
-            Optional<User> userOptional = userService.getById(id);
-            return userOptional
-                    .map(user -> new ResponseEntity<>(convertToDto(user), HttpStatus.OK))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            User user = userService.getById(id);
+            return new ResponseEntity<>(convertToDto(user), HttpStatus.OK);
         }
         // user can only get himself but not other users
         if (id.equals(authenticatedUserId)) {
@@ -71,7 +69,7 @@ public class UsersRestApiController {
     @PutMapping("/users")
     public ResponseEntity<?> edit(@RequestBody UserDto userDto) {
         Long id = userDto.getId();
-        if (id != null && userService.getById(id).isPresent()) {
+        if (id != null && userService.getById(id) != null) {
             User user = convertToEntity(userDto);
             userService.edit(user);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -82,8 +80,8 @@ public class UsersRestApiController {
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        if (userService.getById(id).isPresent()) {
-            userService.delete(userService.getById(id).get());
+        if (userService.getById(id) != null) {
+            userService.delete(userService.getById(id));
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -104,8 +102,8 @@ public class UsersRestApiController {
         String roleFromDto = userDto.getRole();
         userDto.setRole(null);
         User user = modelMapper.map(userDto, User.class);
-        Role role = roleService.getByName(roleFromDto);
-        user.setRole(role);
+        Set<Role> roles = roleService.getByName(roleFromDto);
+        user.setRoles(roles);
         return user;
     }
 }
